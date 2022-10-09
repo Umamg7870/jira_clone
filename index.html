@@ -1,55 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-        integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@323;400&display=swap" rel="stylesheet">
-    <title>Jira Ticket</title>
+    <title>Document</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link rel="stylesheet"  href="style.css" />
 </head>
-
 <body>
-    <!-- Toolbox -->
-    <div class="toolbox-cont">
-        <div class="toolbox-priority-cont">
-            <div class="lightpink color"></div>
-            <div class="lightblue color"></div>
-            <div class="lightgreen color"></div>
-            <div class="black color"></div>
-        </div>
-        <div class="action-btn-cont">
-            <div class="add-btn">
-                <i class="fas fa-plus"></i>
+    <div class="container">
+        <div class="navbar">
+            <div class="filters">
+                <div class="filter">
+                    <div class="pink"></div>
+                </div>
+                <div class="filter">
+                    <div class="blue"></div>
+                </div>
+                <div class="filter">
+                    <div class="green"></div>
+                </div>
+                <div class="filter">
+                    <div class="black"></div>
+                </div>
             </div>
-            <div class="remove-btn">
-                <i class="fas fa-times"></i>
+            <div class="action-buttons">
+                <div class="add">
+                    <span class="material-icons">add</span>
+                </div>
+                <div class="delete">
+                    <span class="material-icons">delete</span>
+                </div>
             </div>
         </div>
-    </div>
-    <!-- Main container -->
-    <div class="main-cont">
-    </div>
-
-
-    <div class="modal-cont">
-        <textarea spellcheck="false" class="textarea-cont" placeholder="Enter your ticket task.."></textarea>
-        <div class="priority-colors-cont">
-            <div class="lightpink priority-color"></div>
-            <div class="lightblue priority-color"></div>
-            <div class="lightgreen priority-color"></div>
-            <div class="black priority-color border"></div>
+        <div class="grid">
+            <!-- <div class="ticket">
+                <div class="ticket-color pink"></div>
+                <div class="ticked-id">#12345</div>
+                <div class="actual-task">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, praesentium.
+                </div>
+            </div> -->
         </div>
     </div>
-    <script defer src="https://unpkg.com/shortid-dist@1.0.5/dist/shortid-2.2.13.min.js"></script>
-    <script src="./script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/short-unique-id@latest/dist/short-unique-id.min.js"></script>
+    <!-- <script>
+        let uid = new ShortUniqueId();
+    </script> -->
+    <script src="script.js"></script>
 </body>
-
 </html>
