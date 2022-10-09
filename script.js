@@ -1,205 +1,240 @@
-let addBtn = document.querySelector(".add-btn");
-let removeBtn = document.querySelector(".remove-btn");
-let modalCont = document.querySelector(".modal-cont");
-let mainCont = document.querySelector(".main-cont");
-let textareaCont = document.querySelector(".textarea-cont");
-let allPriorityColors = document.querySelectorAll(".priority-color");
-let toolBoxColors = document.querySelectorAll(".color");
+let addbtn=document.querySelector(".add");
+let body=document.querySelector("body");
+let grid=document.querySelector(".grid");
+let deleteBtn=document.querySelector(".delete");
+let colors=["pink","blue","green","black"];
+let deleteMode=false;
 
-let colors = ["lightpink", "lightblue", "lightgreen", "black"];
-let modalPriorityColor = colors[colors.length - 1];
-
-let addFlag = false;
-let removeFlag = false;
-
-let lockClass = "fa-lock";
-let unlockClass = "fa-lock-open";
-
-let ticketsArr = [];
-
-if (localStorage.getItem("jira_tickets")) {
-    // Retrieve and display tickets
-    ticketsArr = JSON.parse(localStorage.getItem("jira_tickets"));
-    ticketsArr.forEach((ticketObj) => {
-        createTicket(ticketObj.ticketColor, ticketObj.ticketTask, ticketObj.ticketID);
-    })
-}
-
-for (let i = 0; i < toolBoxColors.length; i++) {
-    toolBoxColors[i].addEventListener("click", (e) => {
-        let currentToolBoxColor = toolBoxColors[i].classList[0];
-
-        let filteredTickets = ticketsArr.filter((ticketObj, idx) => {
-            return currentToolBoxColor === ticketObj.ticketColor;
-        })
-
-        // Remove previous tickets
-        let allTicketsCont = document.querySelectorAll(".ticket-cont");
-        for (let i = 0; i < allTicketsCont.length; i++) {
-            allTicketsCont[i].remove();
+let filterChildren=document.querySelectorAll(".filter");
+for(let i=0;i<filterChildren.length;i++){
+    filterChildren[i].addEventListener("click",function(e){
+        console.log(filterChildren[i]);
+        let divInFilter=filterChildren[i].querySelector("div");
+        if(!filterChildren[i].classList.contains("filter-selected")){
+            let filterColor=divInFilter.classList[0];
+            console.log(filterColor);
+            // let filterChildren=document.querySelectorAll(".filter");
+            for(let j=0;j<filterChildren.length;j++){
+                filterChildren[j].classList.remove("filter-selected");
+            }
+            filterChildren[i].classList.add("filter-selected");
+            loadTask(filterColor);
+        }else{
+            filterChildren[i].classList.remove("filter-selected");
+            console.log("no");
+            loadTask();
         }
-        // Display new filtered tickets
-        filteredTickets.forEach((ticketObj, idx) => {
-            createTicket(ticketObj.ticketColor, ticketObj.ticketTask, ticketObj.ticketID);
-        })
-    })
-
-    toolBoxColors[i].addEventListener("dblclick", (e) => {
-        // Remove previous tickets
-        let allTicketsCont = document.querySelectorAll(".ticket-cont");
-        for (let i = 0; i < allTicketsCont.length; i++) {
-            allTicketsCont[i].remove();
-        }
-
-        ticketsArr.forEach((ticketObj, idx) => {
-            createTicket(ticketObj.ticketColor, ticketObj.ticketTask, ticketObj.ticketID);
-        })
-    })
-}
-
-// Listener for modal priority coloring
-allPriorityColors.forEach((colorElem, idx) => {
-    colorElem.addEventListener("click", (e) => {
-        allPriorityColors.forEach((priorityColorElem, idx) => {
-            priorityColorElem.classList.remove("border");
-        })
-        colorElem.classList.add("border");
-
-        modalPriorityColor = colorElem.classList[0];
-    })
-})
-
-addBtn.addEventListener("click", (e) => {
-    // Display Modal
-    // Generate ticket
-
-    // AddFlag, true -> Modal Display
-    // AddFlag, False -> Modal None
-    addFlag = !addFlag;
-    if (addFlag) {
-        modalCont.style.display = "flex";
-    }
-    else {
-        modalCont.style.display = "none";
-    }
-})
-removeBtn.addEventListener("click", (e) => {
-    removeFlag = !removeFlag;
-    console.log(removeFlag);
-})
-
-
-modalCont.addEventListener("keydown", (e) => {
-    let key = e.key;
-    if (key === "Shift") {
-        createTicket(modalPriorityColor, textareaCont.value);
-        addFlag = false;
-        setModalToDefault();
-    }
-})
-
-function createTicket(ticketColor, ticketTask, ticketID) {
-    let id = ticketID || shortid();
-    let ticketCont = document.createElement("div");
-    ticketCont.setAttribute("class", "ticket-cont");
-    ticketCont.innerHTML = `
-        <div class="ticket-color ${ticketColor}"></div>
-        <div class="ticket-id">#${id}</div>
-        <div class="task-area">${ticketTask}</div>
-        <div class="ticket-lock">
-            <i class="fas fa-lock"></i>
-        </div>
-    `;
-    mainCont.appendChild(ticketCont);
-
-    // Create object of ticket and add to array
-    if (!ticketID) {
-        ticketsArr.push({ ticketColor, ticketTask, ticketID: id });
-        localStorage.setItem("jira_tickets", JSON.stringify(ticketsArr));
-    }
-    console.log(ticketsArr);
-    handleRemoval(ticketCont, id);
-    handleLock(ticketCont, id);
-    handleColor(ticketCont, id);
-}
-
-function handleRemoval(ticket, id) {
-    // removeFlag -> true -> remove
-    ticket.addEventListener("click", (e) => {
-        if (!removeFlag) return;
-
-        let idx = getTikcetIdx(id);
-
-        // DB removal
-        ticketsArr.splice(idx, 1);
-        let strTicketsArr = JSON.stringify(ticketsArr);
-        localStorage.setItem("jira_tickets", strTicketsArr);
         
-        ticket.remove(); //UI removal
     })
 }
+    
 
-function handleLock(ticket, id) {
-    let ticketLockElem = ticket.querySelector(".ticket-lock");
-    let ticketLock = ticketLockElem.children[0];
-    let ticketTaskArea = ticket.querySelector(".task-area");
-    ticketLock.addEventListener("click", (e) => {
-        let ticketIdx = getTikcetIdx(id);
-
-        if (ticketLock.classList.contains(lockClass)) {
-            ticketLock.classList.remove(lockClass);
-            ticketLock.classList.add(unlockClass);
-            ticketTaskArea.setAttribute("contenteditable", "true");
-        }
-        else {
-            ticketLock.classList.remove(unlockClass);
-            ticketLock.classList.add(lockClass);
-            ticketTaskArea.setAttribute("contenteditable", "false");
-        }
-
-        // Modify data in localStorage (Ticket Task)
-        ticketsArr[ticketIdx].ticketTask = ticketTaskArea.innerText;
-        localStorage.setItem("jira_tickets", JSON.stringify(ticketsArr));
-    })
+if(!localStorage.getItem("AllTickets")){
+    let allTickets={};
+    allTickets=JSON.stringify(allTickets);
+    localStorage.setItem("AllTickets",allTickets);
 }
 
-function handleColor(ticket, id) {
-    let ticketColor = ticket.querySelector(".ticket-color");
-    ticketColor.addEventListener("click", (e) => {
-        // Get ticketIdx from the tickets array
-        let ticketIdx = getTikcetIdx(id);
+loadTask();
 
-        let currentTicketColor = ticketColor.classList[1];
-        // Get ticket color idx
-        let currentTicketColorIdx = colors.findIndex((color) => {
-            return currentTicketColor === color;
+
+
+
+deleteBtn.addEventListener("click",function(e){
+    // console.log(e.currentTarget);
+    let filterChildren=document.querySelectorAll(".filter");
+    for(let j=0;j<filterChildren.length;j++){
+        filterChildren[j].classList.remove("filter-selected");
+    }
+    if(e.currentTarget.classList.contains("delete-selected")){
+        e.currentTarget.classList.remove("delete-selected");
+        deleteMode=false;
+    }else{
+        e.currentTarget.classList.add("delete-selected")
+        deleteMode=true;
+    }
+})
+
+addbtn.addEventListener("click",function(){
+    let filterChildren=document.querySelectorAll(".filter");
+    for(let j=0;j<filterChildren.length;j++){
+        filterChildren[j].classList.remove("filter-selected");
+    }
+    let preModal=document.querySelector(".modal");
+    if(preModal!=null)return;
+
+    let div=document.createElement("div");
+    div.classList.add("modal");
+    div.innerHTML=`<div class="task-section">
+    <div class="task-inner-container" contenteditable="true" data-placeholder="Press Enter to Save & Escape to exit"></div>
+</div>
+<div class="modal-priority-section">
+    <div class="priority-inner-section">
+        <div class="modal-priority pink"></div>
+        <div class="modal-priority blue"></div>
+        <div class="modal-priority green"></div>
+        <div class="modal-priority black selected"></div>
+    </div>
+</div>`;
+    let allModalPriority=div.querySelectorAll(".modal-priority");
+    // console.log(allModalPriority)
+    let ticketColor="black";
+    for(let i=0;i<allModalPriority.length;i++){
+        allModalPriority[i].addEventListener("click",function(e){
+
+            for(let j=0;j<allModalPriority.length;j++){
+                allModalPriority[j].classList.remove("selected");
+            }
+            allModalPriority[i].classList.add("selected");
+            ticketColor=allModalPriority[i].classList[1];
         })
-        console.log(currentTicketColor, currentTicketColorIdx);
-        currentTicketColorIdx++;
-        let newTicketColorIdx = currentTicketColorIdx % colors.length;
-        let newTicketColor = colors[newTicketColorIdx];
-        ticketColor.classList.remove(currentTicketColor);
-        ticketColor.classList.add(newTicketColor);
+    }
+    let taskInnerContainer=div.querySelector(".task-inner-container");
+    taskInnerContainer.addEventListener("keydown",function(e){
+        if(e.key== "Enter"){
+            // console.log(e.currentTarget.innerText);
+            // console.log(ticketColor);
+            let id=Date.now();
+            let task=e.currentTarget.innerText;
+            let allTickets=JSON.parse(localStorage.getItem("AllTickets"));
 
-        // Modify data in localStorage (priority color change)
-        ticketsArr[ticketIdx].ticketColor = newTicketColor;
-        localStorage.setItem("jira_tickets", JSON.stringify(ticketsArr));
-    })
-}
+            let ticketObj={
+                color:ticketColor,
+                taskValue:task,
+            }
 
-function getTikcetIdx(id) {
-    let ticketIdx = ticketsArr.findIndex((ticketObj) => {
-        return ticketObj.ticketID === id;
-    })
-    return ticketIdx;
-}
+            allTickets[id]=ticketObj;
 
-function setModalToDefault() {
-    modalCont.style.display = "none";
-    textareaCont.value = "";
-    modalPriorityColor = colors[colors.length - 1];
-    allPriorityColors.forEach((priorityColorElem, idx) => {
-        priorityColorElem.classList.remove("border");
+            localStorage.setItem("AllTickets",JSON.stringify(allTickets));
+
+            div.remove();
+            let ticketDiv=document.createElement("div");
+            ticketDiv.classList.add("ticket");
+            ticketDiv.setAttribute("data-id",id);
+            ticketDiv.innerHTML=`<div data-id="${id}" class="ticket-color ${ticketColor}"></div>
+            <div class="ticket-id">#${id}</div>
+            <div data-id="${id}" class="actual-task" contentEditable="true">
+                ${task}
+            </div>`;
+
+            let actualTaskDiv=ticketDiv.querySelector(".actual-task")
+            actualTaskDiv.addEventListener("input",function(e){
+                let updatedTask=e.currentTarget.innerText;
+                // console.log(updatedTask);
+                let currTicketId=e.currentTarget.getAttribute("data-id");
+                let allTickets=JSON.parse(localStorage.getItem("AllTickets"));
+                allTickets[currTicketId].taskValue=updatedTask;
+                localStorage.setItem("AllTickets",JSON.stringify(allTickets));
+
+            })
+
+            let ticketColorDiv=ticketDiv.querySelector(".ticket-color");
+            ticketColorDiv.addEventListener("click",function(e){
+                let currTicketId=e.currentTarget.getAttribute("data-id");
+                let currColor=ticketColorDiv.classList[1];
+                let index=-1;
+                for(let i=0;i<colors.length;i++){
+                    if(currColor==colors[i])index=i;
+                }
+                index++;
+                index=index%colors.length;
+                let newColor=colors[index];
+                let allTickets=JSON.parse(localStorage.getItem("AllTickets"));
+                allTickets[currTicketId].color=newColor;
+                localStorage.setItem("AllTickets",JSON.stringify(allTickets));
+                ticketColorDiv.classList.remove(currColor);
+                ticketColorDiv.classList.add(newColor);
+            })
+            ticketDiv.addEventListener("click",function(e){
+                if(deleteMode){
+                    let currTicketId=e.currentTarget.getAttribute("data-id");
+                    // console.log(currTicketId);
+                    let allTickets=JSON.parse(localStorage.getItem("AllTickets"));
+                    delete allTickets[currTicketId];
+                    localStorage.setItem("AllTickets",JSON.stringify(allTickets));
+                    e.currentTarget.remove();
+                }
+            })
+            grid.append(ticketDiv);
+        }else if(e.key=="Escape"){
+            div.remove();
+        }
     })
-    allPriorityColors[allPriorityColors.length - 1].classList.add("border");
+    body.append(div);
+
+})
+
+
+function loadTask(color){
+
+    let ticketOnUI=document.querySelectorAll(".ticket");
+    for(let i=0;i<ticketOnUI.length;i++){
+        ticketOnUI[i].remove();
+    }
+    // 1 fetch all allTickets Data
+    // 2 create ticket UI for each ticket object 
+    // 3 add required listener
+    // 4 add tickets in grid section of UI
+    let allTickets=localStorage.getItem("AllTickets");
+    allTickets=JSON.parse(allTickets);
+    for(let key in allTickets){
+
+
+        let currTicketId=key;
+        let currTicketObj=allTickets[key];
+
+        if(color && color!=currTicketObj.color)continue;
+
+        let ticketDiv=document.createElement("div");
+        ticketDiv.classList.add("ticket");
+        ticketDiv.setAttribute("data-id",currTicketId);
+        ticketDiv.innerHTML=`<div data-id="${currTicketId}" class="ticket-color ${currTicketObj.color}"></div>
+        <div class="ticket-id">#${currTicketId}</div>
+        <div data-id="${currTicketId}" class="actual-task" contentEditable="true">
+            ${currTicketObj.taskValue}
+        </div>`;
+
+
+        let actualTaskDiv=ticketDiv.querySelector(".actual-task")
+            actualTaskDiv.addEventListener("input",function(e){
+                let updatedTask=e.currentTarget.innerText;
+                // console.log(updatedTask);
+                let currTicketId=e.currentTarget.getAttribute("data-id");
+                let allTickets=JSON.parse(localStorage.getItem("AllTickets"));
+                allTickets[currTicketId].taskValue=updatedTask;
+                localStorage.setItem("AllTickets",JSON.stringify(allTickets));
+
+            })
+
+        let ticketColorDiv=ticketDiv.querySelector(".ticket-color");
+        ticketColorDiv.addEventListener("click",function(e){
+            let currTicketId=e.currentTarget.getAttribute("data-id");
+            let currColor=ticketColorDiv.classList[1];
+            let index=-1;
+            for(let i=0;i<colors.length;i++){
+                if(currColor==colors[i])index=i;
+            }
+            index++;
+            index=index%colors.length;
+            let newColor=colors[index];
+            let allTickets=JSON.parse(localStorage.getItem("AllTickets"));
+            allTickets[currTicketId].color=newColor;
+            localStorage.setItem("AllTickets",JSON.stringify(allTickets));
+            ticketColorDiv.classList.remove(currColor);
+            ticketColorDiv.classList.add(newColor);
+        })
+        ticketDiv.addEventListener("click",function(e){
+            if(deleteMode){
+                let currTicketId=e.currentTarget.getAttribute("data-id");
+                // console.log(currTicketId);
+                let allTickets=JSON.parse(localStorage.getItem("AllTickets"));
+                delete allTickets[currTicketId];
+                localStorage.setItem("AllTickets",JSON.stringify(allTickets));
+                e.currentTarget.remove();
+            }
+        })
+        grid.append(ticketDiv);
+        
+    }
+
 }
