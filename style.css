@@ -1,197 +1,320 @@
+:root {
+    --pink: #ff6b6b;
+    --blue: #4ecdc4;
+    --green: #95e1d3;
+    --black: #2d3436;
+    --gray: #dfe6e9;
+}
+
 * {
-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
-margin: 0;
+    background-color: #f5f6fa;
 }
 
 .container {
-height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .navbar {
-background-color: #57606f;
-height: 15vh;
-display: flex;
+    background: white;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
-.grid {
-height: 85vh;
-display: flex;
-flex-wrap:wrap;
-justify-content: space-evenly;
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.filters,
-.action-buttons {
-height: 50%;
-background-color: #2f3542;
-margin-top: calc((25 / 100) * 15vh);
-margin-left: 5rem;
+.logo h1 {
+    font-size: 1.5rem;
+    color: var(--black);
 }
 
 .filters {
-width: 16rem;
-display: flex;
-}
-
-.action-buttons {
-width: 8rem;
-display: flex;
+    display: flex;
+    gap: 1rem;
 }
 
 .filter {
-height: 100%;
-width: 25%;
-display: flex;
-justify-content: center;
-align-items: center;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 .filter:hover {
-background-color: #747d8c;
-}
-
-.add,
-.delete {
-cursor: default;
-height: 100%;
-width: 50%;
-color: white;
-font-size: 3rem;
-font-family: Arial, Helvetica, sans-serif;
-display: flex;
-/* default flex dirn => horizontal  */
-justify-content: center;
-/* this will set your children in horizontal center  */
-align-items: center;
-/* this will set your children in vertical center  */
-}
-
-.delete {
-font-size: 2.9rem;
-}
-
-.add:hover,
-.delete:hover,
-.delete-selected,
-.filter-selected{
-background-color: #747d8c;
+    background-color: var(--gray);
 }
 
 .filter div {
-height: 50%;
-width: 50%;
-border-radius: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
 }
 
-.pink {
-background-color: #ff6b81;
+.pink { background-color: var(--pink); }
+.blue { background-color: var(--blue); }
+.green { background-color: var(--green); }
+.black { background-color: var(--black); }
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
-.green {
-background-color: #10ac84;
+.add, .delete {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
 }
 
-.blue {
-background-color: #0abde3;
+.add {
+    background-color: var(--blue);
+    color: white;
 }
 
-.black {
-background-color: black;
+.delete {
+    background-color: var(--pink);
+    color: white;
 }
 
-.material-icons {
-font-size: 2.5rem !important;
+.search {
+    position: relative;
+}
+
+.search input {
+    padding: 8px 16px;
+    padding-right: 40px;
+    border: 1px solid var(--gray);
+    border-radius: 20px;
+    outline: none;
+}
+
+.search .material-icons {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.ticket {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.ticket:hover {
+    transform: translateY(-5px);
+}
+
+.ticket-color {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    border-radius: 10px 10px 0 0;
 }
 
 .modal {
-/* background-color: red; */
-height: 20rem;
-display: flex;
-width: 35rem;
-position: fixed;
-top: 20vh;
-/* ye left wala 50% jo hai wo body ki width ka hai  */
-left: 50%;
-/* ye translate wala jo 50% hai wo khudke element ka hai  */
-transform: translateX(-50%);
-}
-
-.task-section{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    width:70%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ecf0f1;
+    background: rgba(0,0,0,0.5);
 }
 
-.modal-priority-section{
-    background-color: #2c3e50;
-    height: 100%;
-    width:30%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.task-inner-container{
-    font-size: 1.3rem;
-    padding: 10px;
-    height: 80%;
-    width: 80%;
-    background-color: white;
-    overflow: auto;
-    outline: none;
-}
-.priority-inner-section{
-    background-color: white;
-    height: 80%;
-    width: 60%;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    flex-direction: column;
-    border: 1px solid;
-}
-.modal-priority{
-    height: 22%;
-    width: 80%;
-}
-.modal-priority:hover{
-    border: 5px solid #747d8d;
-}
-.selected{
-    border: #747d8c 5px solid;
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 2rem;
+    border-radius: 10px;
 }
 
-.ticket{
-    height: 12rem;
-    width: 20rem;
-    border: 1px solid;
-    font-family: sans-serif;
-    margin: 10px;
-}
-.ticket-color{
-    width: 100%;
-    height: 8%;
-}
-.ticked-id{
-    width: 100%;
-    height: 16%;
-    padding: 6px;
-    font-weight: bold;
-}
-.actual-task{
-    width: 100%;
-    height: 82%;
-    padding: 10px;
-    background-color: #f7f1e3;
+.empty-state {
+    grid-column: 1 / -1;
     text-align: center;
-    outline: none;
-    overflow: auto;
+    padding: 3rem;
+    color: #666;
 }
-.task-inner-container:empty:not(:focus):before {
-    content: attr(data-placeholder)
-  }
+
+.empty-state .material-icons {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+/* Add these styles to your existing CSS */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+#taskTitle, #taskDescription {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#taskDescription {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.priority-selector {
+    margin: 15px 0;
+}
+
+.priority-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.priority-option {
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.priority-option.selected {
+    outline: 2px solid #000;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-actions .cancel {
+    background: #ddd;
+}
+
+.modal-actions .save {
+    background: var(--blue);
+    color: white;
+}
+
+/* Add to your existing CSS */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content input,
+.modal-content textarea {
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.modal-content textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-actions .save {
+    background: var(--blue);
+    color: white;
+}
+
+.modal-actions .cancel {
+    background: #ddd;
+}

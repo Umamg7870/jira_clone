@@ -1,53 +1,80 @@
+Jira_clone/index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Jira Clone | Task Management</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link rel="stylesheet"  href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <div class="container">
-        <div class="navbar">
+        <header class="navbar">
+            <div class="logo">
+                <span class="material-icons">assignment</span>
+                <h1>Task Board</h1>
+            </div>
             <div class="filters">
-                <div class="filter">
+                <div class="filter" data-priority="high">
                     <div class="pink"></div>
+                    <span>High</span>
                 </div>
-                <div class="filter">
+                <div class="filter" data-priority="medium">
                     <div class="blue"></div>
+                    <span>Medium</span>
                 </div>
-                <div class="filter">
+                <div class="filter" data-priority="low">
                     <div class="green"></div>
+                    <span>Low</span>
                 </div>
-                <div class="filter">
+                <div class="filter" data-priority="backlog">
                     <div class="black"></div>
+                    <span>Backlog</span>
                 </div>
             </div>
             <div class="action-buttons">
-                <div class="add">
+                <div class="add" title="Add New Task">
                     <span class="material-icons">add</span>
                 </div>
-                <div class="delete">
+                <div class="search">
+                    <input type="text" placeholder="Search tasks...">
+                    <span class="material-icons">search</span>
+                </div>
+                <div class="delete" title="Delete Selected">
                     <span class="material-icons">delete</span>
                 </div>
             </div>
-        </div>
+        </header>
         <div class="grid">
-            <!-- <div class="ticket">
-                <div class="ticket-color pink"></div>
-                <div class="ticked-id">#12345</div>
-                <div class="actual-task">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, praesentium.
+            <div class="empty-state">
+                <span class="material-icons">note_add</span>
+                <p>No tasks yet. Click the + button to add one!</p>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <h2>Add New Task</h2>
+            <input type="text" id="taskTitle" placeholder="Task Title">
+            <textarea id="taskDescription" placeholder="Task Description"></textarea>
+            <div class="priority-selector">
+                <label>Priority:</label>
+                <div class="priority-options">
+                    <div class="priority-option pink" data-priority="high">High</div>
+                    <div class="priority-option blue" data-priority="medium">Medium</div>
+                    <div class="priority-option green" data-priority="low">Low</div>
                 </div>
-            </div> -->
+            </div>
+            <div class="modal-actions">
+                <button class="cancel">Cancel</button>
+                <button class="save">Save Task</button>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/short-unique-id@latest/dist/short-unique-id.min.js"></script>
-    <!-- <script>
-        let uid = new ShortUniqueId();
-    </script> -->
     <script src="script.js"></script>
 </body>
 </html>
